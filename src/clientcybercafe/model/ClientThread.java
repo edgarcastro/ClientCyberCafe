@@ -33,9 +33,11 @@ public class ClientThread extends Thread{
         try{
             sk = new Socket(ipServer, port);
             state = true;
+            JOptionPane.showMessageDialog(null, "CONECTADO AL SERVIDOR");
             System.out.println("CONECTADO AL SERVIDOR");
             catchName();
         }catch(IOException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR: No se puede conectar al Servidor");
             System.out.println("ERROR: No se puede conectar al Servidor");
         }
     }

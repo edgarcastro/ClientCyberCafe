@@ -18,13 +18,13 @@ public class BloquedView extends javax.swing.JFrame {
      * Creates new form BloquedView
      */
     public BloquedView() {
-        //this.setUndecorated(true);//quita bordes a jframe
+        this.setUndecorated(true);//quita bordes a jframe
         initComponents();       
-        //this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE  );//evita cerra jframe con ALT+C
+        this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE  );//evita cerra jframe con ALT+C
         this.setExtendedState( MAXIMIZED_BOTH );//maximizado
         this.setAlwaysOnTop(true);//siempre al frente
          //nueva instancia de jBlocked pasando como parametros e este JFrame
-        //new JBloqued( this ).block();
+        new JBloqued( this ).block();
     }
 
     /**
@@ -40,23 +40,17 @@ public class BloquedView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Pantalla de Bloqueo");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/clientcybercafe/views/bloqueo.jpg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(152, 152, 152)
-                .addComponent(jLabel1)
-                .addContainerGap(154, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addComponent(jLabel1)
-                .addContainerGap(153, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
