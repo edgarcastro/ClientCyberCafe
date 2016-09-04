@@ -6,6 +6,7 @@
 package clientcybercafe.controllers;
 
 import clientcybercafe.model.ClientThread;
+import clientcybercafe.model.PC;
 import clientcybercafe.views.BloquedView;
 import clientcybercafe.views.MainView;
 import javax.swing.JOptionPane;
@@ -18,11 +19,14 @@ public class masterController {
     
     public static MainView mv;
     public static BloquedView bv;
+    public static PC pc;
     
     public static void init(){
+        bv = new BloquedView();
         mv = new MainView();
         mv.setLocationRelativeTo(null);
         mv.setVisible(true);
+        pc = new PC(bv);
     }
     
     public static void initClient(String ipAddress, int port){
@@ -35,12 +39,22 @@ public class masterController {
     }
     
     public static void bloquedPC(){
-        //JOptionPane.showMessageDialog(mv, "Hay me bloquaste");
-        bv = new BloquedView();
-        bv.setVisible(true);
+        pc.block();
     }
     
     public static void unBloquedPC(){
-        bv.dispose();
+        pc.unBlock();
+    }
+    
+    public static void apagarPC(){
+        pc.apagar();
+    }
+    
+    public static void reiniciarPc(){
+        pc.reiniciar();
+    }
+    
+    public static void cancelar(){
+        pc.cancelar();
     }
 }

@@ -6,7 +6,6 @@
 package clientcybercafe.views;
 
 import clientcybercafe.controllers.masterController;
-import clientcybercafe.model.JBloqued;
 
 /**
  *
@@ -23,8 +22,6 @@ public class BloquedView extends javax.swing.JFrame {
         this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE  );//evita cerra jframe con ALT+C
         this.setExtendedState( MAXIMIZED_BOTH );//maximizado
         this.setAlwaysOnTop(true);//siempre al frente
-         //nueva instancia de jBlocked pasando como parametros e este JFrame
-        new JBloqued( this ).block();
     }
 
     /**

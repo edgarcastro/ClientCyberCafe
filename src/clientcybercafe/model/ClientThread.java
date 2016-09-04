@@ -9,6 +9,8 @@ import clientcybercafe.controllers.masterController;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,19 +31,20 @@ public class ClientThread extends Thread{
         this.bloqued = false;
     }
     
+    //establece la coneccion con el servidor
     public void connect(){
         try{
             sk = new Socket(ipServer, port);
             state = true;
             JOptionPane.showMessageDialog(null, "CONECTADO AL SERVIDOR");
             System.out.println("CONECTADO AL SERVIDOR");
-            catchName();
+            catchName(); 
         }catch(IOException ex) {
             JOptionPane.showMessageDialog(null, "ERROR: No se puede conectar al Servidor");
             System.out.println("ERROR: No se puede conectar al Servidor");
         }
     }
-    
+    //Por este metodo se recive el nombre asignado por el servidor
     public void catchName(){
         Thread hiloFlujoEntrada = new Thread() {
             @Override
@@ -52,7 +55,7 @@ public class ClientThread extends Thread{
                         datosEntrada = new DataInputStream(sk.getInputStream());
                         nameClient = datosEntrada.readUTF();
                         masterController.updateNamePC(nameClient);
-                        catchBloqued();
+                        catchAction();
                     } catch (IOException ex) {
                         System.out.println("ERROR: De escritura y lectura en la conexion");
                         state = false;
@@ -63,55 +66,49 @@ public class ClientThread extends Thread{
         hiloFlujoEntrada.start();  
     };
     
-    public void catchBloqued(){
-        Thread hiloFlujoEntrada = new Thread() {
-            @Override
-            public void run() {
-                while (bloqued == false) {                    
-                    DataInputStream datosEntrada = null;
-                    try {
-                        datosEntrada = new DataInputStream(sk.getInputStream());
-                        if(datosEntrada.readUTF().equals("BLOCK")){
-                            bloqued = true;
-                            masterController.bloquedPC();
-                            catchUnBloqued();
-                            System.out.println("Este pc "+nameClient+" esta bloqueado");
-                        }
-                    } catch (IOException ex) {
-                        System.out.println("ERROR: De escritura y lectura en la conexion");
-                        state = false;
-                    }
+    //Mantiene la coneccion con el servidor
+    //Recibe los mensajes del servidor
+    public void catchAction(){
+        Thread hiloFlujoEntrada = new Thread(){
+            boolean run = true;  
+            String mensaje;
+            public void run(){
+                DataInputStream datosEntrada = null;
+                try {
+                    datosEntrada = new DataInputStream(sk.getInputStream());   
+                    mensaje=datosEntrada.readUTF();
+                    ejecutar(mensaje);
+                    catchAction();
+                } catch (IOException ex) {
+                    Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+                
+                
+            }               
         };
         hiloFlujoEntrada.start();
     }
     
-    public void catchUnBloqued(){
-        Thread hiloFlujoEntrada = new Thread() {
-            @Override
-            public void run() {
-                while (bloqued == true) {                    
-                    DataInputStream datosEntrada = null;
-                    try {
-                        datosEntrada = new DataInputStream(sk.getInputStream());
-                        if(datosEntrada.readUTF().equals("UNBLOCK")){
-                            bloqued = false;
-                            masterController.unBloquedPC();
-                            catchBloqued();
-                            System.out.println("Este pc "+nameClient+" esta desbloqueado");
-                        }
-                    } catch (IOException ex) {
-                        System.out.println("ERROR: De escritura y lectura en la conexion");
-                        state = false;
-                    }
-                }
-            }
-        };
-        hiloFlujoEntrada.start();
+    //ejecuta la accion que recibe como prametro (mensaje)
+    public void ejecutar(String mensaje){      
+                    if((mensaje.equals("BLOCK"))&&(bloqued==false)){
+                        bloqued = true;
+                        masterController.bloquedPC();
+                        System.out.println("Este pc "+nameClient+" esta bloqueado");
+                        
+                    }else if((mensaje.equals("UNBLOCK"))&&(bloqued==true)){
+                        bloqued = false;
+                        masterController.unBloquedPC();
+                        System.out.println("Este pc "+nameClient+" esta desbloqueado");
+                        
+                    }else if(mensaje.equals("APAGAR")){
+                        masterController.apagarPC();
+                    }else if(mensaje.equals("REINICIAR")){
+                        masterController.reiniciarPc();
+                    }else if(mensaje.equals("CANCELAR")){
+                        masterController.cancelar();
+                    }     
     }
-    
-    
     
     @Override
     public void run() {
