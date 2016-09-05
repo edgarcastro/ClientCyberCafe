@@ -29,15 +29,15 @@ public class PC {
  */
     public void block()
     {
-//        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-//        scheduler.scheduleAtFixedRate( 
-//            new Runnable() 
-//            {
-//                @Override
-//                public void run() {                   
-//                    front(); 
-//                }
-//            }, 500, 50 , TimeUnit.MILLISECONDS ); //comienza dentro de 1/2 segundo y luego se repite cada N segundos
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate( 
+            new Runnable() 
+            {
+                @Override
+                public void run() {                   
+                    front(); 
+                }
+            }, 500, 50 , TimeUnit.MILLISECONDS ); //comienza dentro de 1/2 segundo y luego se repite cada N segundos
         jframe.setVisible(true);
     }
 
@@ -67,11 +67,11 @@ public class PC {
     }
     
     public void apagar(){
-        exec("shutdown -s -t 3600");//apagar en t segundos
+        exec("shutdown -s -t 30");//apagar en 30 segundos
     }
     
     public void reiniciar(){
-        exec("shutdown -r -t 3600");//reinicar en t segundos
+        exec("shutdown -r -t 30");//reinicar en 30 segundos
     }
     
     public void cancelar(){
